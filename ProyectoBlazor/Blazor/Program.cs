@@ -1,6 +1,8 @@
 using Blazor.Data;
 using Blazor.Interfaces;
 using Blazor.Servicios;
+using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -12,12 +14,14 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 
-MySQLConfiguration cadenaConexion = new MySQLConfiguration(builder.Configuration.GetConnectionString("MySQL"));
+MySQLConfiguration cadenaConexion = new MySQLConfiguration(builder.Configuration.GetConnectionString("MySQL")); 
 builder.Services.AddSingleton(cadenaConexion);
-
-
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 
+builder.Services.AddSweetAlert2(); //<=============================== ALERT2 ****************
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -35,7 +39,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthorization();  //AGREAGADO
+app.UseAuthentication(); //AGREAGADO
+
 app.MapBlazorHub();
+app.MapControllers(); //AGREAGADO
+
 app.MapFallbackToPage("/_Host");
 
 app.Run();

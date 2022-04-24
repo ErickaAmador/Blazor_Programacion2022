@@ -23,14 +23,16 @@ public class UsuarioServicio : IUsuarioServicio
 
 
 
-    public Task<bool> Actualizar(Usuario usuario)
+    public async Task<bool> Actualizar(Usuario usuario)
     {
-        throw new NotImplementedException();
+        return await usuarioRepositorio.Actualizar(usuario);
     }
 
-    public Task<bool> Eliminar(Usuario usuario)
+
+
+    public async  Task<bool> Eliminar(Usuario usuario)
     {
-        throw new NotImplementedException();
+         return await usuarioRepositorio.Eliminar(usuario); 
     }
 
 
@@ -42,13 +44,13 @@ public class UsuarioServicio : IUsuarioServicio
 
 
 
-    public Task<Usuario> GetPorCodigo(string codigo)
+    public async Task<Usuario> GetPorCodigo(string codigo)
     {
-        throw new NotImplementedException();
+        return await usuarioRepositorio.GetPorCodigo(codigo);
     }
 
-    public Task<bool> Nuevo(Usuario usuario)
+    public async Task<bool> Nuevo(Usuario usuario)
     {
-        throw new NotImplementedException();
+        return await usuarioRepositorio.Nuevo(usuario); 
     }
 }

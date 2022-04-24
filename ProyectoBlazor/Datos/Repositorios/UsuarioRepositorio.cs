@@ -27,14 +27,42 @@ public class UsuarioRepositorio : IUsuarioRepositorio
 
 
 
-    public Task<bool> Actualizar(Usuario usuario)
+    public async Task<bool> Actualizar(Usuario usuario)
     {
-        throw new NotImplementedException();
+        int resultado;
+        try
+        {
+            using MySqlConnection conexion = Conexion(); //Conexión que esta arriba    
+            await conexion.OpenAsync();
+            string sql = "UPDATE usuario SET Codigo = @Codigo, Nombre = @Nombre, Rol = @Rol, Clave = @Clave, EstaActivo = @EstaActivo WHERE Codigo = @Codigo;";
+            resultado = await conexion.ExecuteAsync(sql, new {usuario.Codigo, usuario.Nombre, usuario.Rol, 
+                                                                usuario.Clave, usuario.EstaActivo});
+            return resultado > 0;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+       
     }
 
-    public Task<bool> Eliminar(Usuario usuario)
+
+
+    public async Task<bool> Eliminar(Usuario usuario)
     {
-        throw new NotImplementedException();
+        int resultado;
+        try
+        {
+            using MySqlConnection conexion = Conexion(); //Conexión que esta arriba    
+            await conexion.OpenAsync();
+            string sql = "DELETE FROM usuario WHERE Codigo = @Codigo;";
+            resultado = await conexion.ExecuteAsync(sql, new{ usuario.Codigo});
+            return resultado > 0;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 
 
@@ -47,7 +75,7 @@ public class UsuarioRepositorio : IUsuarioRepositorio
         {
             using MySqlConnection conexion = Conexion(); //Conexión que esta arriba    
             await conexion.OpenAsync();
-            string sql = "SELECT + FROM usuario;";
+            string sql = "SELECT * FROM usuario;";
             lista = await conexion.QueryAsync<Usuario>(sql);
         }
         catch (Exception ex)
@@ -59,13 +87,58 @@ public class UsuarioRepositorio : IUsuarioRepositorio
 
 
 
-    public Task<Usuario> GetPorCodigo(string codigo)
+    public async Task<Usuario> GetPorCodigo(string codigo)
     {
-        throw new NotImplementedException();
+        Usuario user = new Usuario();   
+        try
+        {
+            using MySqlConnection conexion = Conexion(); //Conexión que esta arriba    
+            await conexion.OpenAsync();
+            string sql = "SELECT * FROM usuario WHERE Codigo = @Codigo;";
+            user = await conexion.QueryFirstAsync<Usuario>(sql,new { codigo });
+        }
+        catch (Exception ex)
+        {
+        }
+        return user;
     }
 
-    public Task<bool> Nuevo(Usuario usuario)
+
+
+
+    public async Task<bool> Nuevo(Usuario usuario)
     {
-        throw new NotImplementedException();
+        int resultado;
+        try
+        {
+            using MySqlConnection conexion = Conexion(); //Conexión que esta arriba    
+            await conexion.OpenAsync();
+            string sql = "INSERT INTO usuario (Codigo, Nombre, Rol, Clave, EstaActivo) VALUES (@Codigo, @Nombre, @Rol, @Clave, @EstaActivo)";
+            resultado = await conexion.ExecuteAsync(sql, usuario);
+            return resultado > 0;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+
+    public async Task<bool> ValidaUsuario(Login login)
+    {
+        bool valido = false;
+
+        try
+        {
+            using MySqlConnection conexion = Conexion();
+            await conexion.OpenAsync();
+            string sql = "SELECT 1 FROM usuario WHERE Codigo = @Codigo AND Clave = @Clave;";
+            valido = await conexion.ExecuteScalarAsync<bool>(sql, new { login.Codigo, login.Clave });  
+        }
+        catch (Exception ex)
+        {
+            
+        }
+        return valido;
     }
 }
