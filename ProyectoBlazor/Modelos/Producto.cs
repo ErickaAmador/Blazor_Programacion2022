@@ -8,7 +8,7 @@ public class Producto
     public string Codigo { get; set; }
     [Required(ErrorMessage = "El campo descripcion es obligatorio")]
     public string Descripcion { get; set; }
-    public decimal Precio { get; set; }
-    public int Existencia { get; set; }
-    public byte[] Imagen { get; set; }
+    public string Precio { get; set; }
+    public string Existencia { get; set; }
+    
 }

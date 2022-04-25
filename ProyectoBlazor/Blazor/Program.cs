@@ -16,7 +16,10 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 MySQLConfiguration cadenaConexion = new MySQLConfiguration(builder.Configuration.GetConnectionString("MySQL")); 
 builder.Services.AddSingleton(cadenaConexion);
+
+//CONECTAR A BASE 
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
+builder.Services.AddScoped<IProductoServicio, ProductoServicio>();
 
 builder.Services.AddSweetAlert2(); //<=============================== ALERT2 ****************
 
